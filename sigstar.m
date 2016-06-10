@@ -70,6 +70,14 @@ function varargout=sigstar(groups,stats,nosort)
 % Rob Campbell - CSHL 2013
 
 
+if nargin<1
+	%Run test function if no arguments are provided
+	h=test_sigstar;
+	if nargout>1
+		varargout{1}=h;
+	end
+	return
+end
 
 %Input argument error checking
 
@@ -276,12 +284,12 @@ if verLessThan('matlab','8.4.0')
 	p=findobj(gca,'Type','Patch');
 	xd=get(p,'XData');
 else
-	p=findobj(gca,'Type','bar')
+	p=findobj(gca,'Type','bar');
 	xd=p.XData;
 end
 
 
-if iscell(xd) & verLessThan('matlab','8.4.0')
+if iscell(xd) && verLessThan('matlab','8.4.0')
 	xd=groupedBarFix(xd,'x');
 end
 
@@ -297,7 +305,7 @@ else
 	yd=p.YData;
 end
 
-if iscell(yd) & verLessThan('matlab','8.4.0')
+if iscell(yd) && verLessThan('matlab','8.4.0')
 	yd=groupedBarFix(yd,'y');
 end
 
