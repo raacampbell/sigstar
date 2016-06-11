@@ -279,131 +279,24 @@ function Y=findMinY(x)
     % the minimum y value needed to clear all the plotted data present over this given range of 
     % x values. 
     %
-    % TODO: current system seems cumbersome. Is it possible to just loop through all plot objects?
-    
-    %First look for patch objects (bars in a bar-chart, most likely)
-    if verLessThan('matlab','8.4.0')
-        p=findobj(gca,'Type','Patch');
-        xd=get(p,'XData');
-    elseif ~isBoxPlot
-        p=findobj(gca,'Type','bar');
-        xd=p.XData;
-    elseif isBoxPlot
-         F=findobj('Tag','Median');
-         for ii=1:length(F)
-            xd(ii) = mean(F(ii).XData);
-         end
-    else
-        error('Can not handle this plot type')
-    end
+    % This version of the function is a fix from Evan Remington
+    oldXLim = get(gca,'XLim');
+    oldYLim = get(gca,'YLim');
 
+    axis(gca,'tight')
+    set(gca,'xlim',x) %Matlab automatically re-tightens y-axis
 
-    if iscell(xd) && verLessThan('matlab','8.4.0')
-        xd=groupedBarFix(xd,'x');
-    end
+    yLim = get(gca,'YLim'); %Now have max y value of all elements within range.
+    Y = max(yLim);
 
-    xd(xd<x(1))=0;
-    xd(xd>x(2))=0;
-
-    overlapping=any(xd,1); %These x locations overlap
-
-    %Find the corresponding y values 
-    if verLessThan('matlab','8.4.0')
-        yd=get(p,'YData');
-    elseif ~isBoxPlot
-        yd=p.YData;
-    elseif isBoxPlot
-         F=[findobj('Tag','Lower Whisker');findobj('Tag','Upper Whisker');findobj('Tag','Outliers')];
-         for ii=1:length(F)
-            yd(ii) = mean(F(ii).YData);
-         end
-    else
-        error('Can not handle this plot type')
-    end
-
-
-    if iscell(yd) && verLessThan('matlab','8.4.0')
-        yd=groupedBarFix(yd,'y');
-    end
-
-    yd=yd(:,overlapping);
-
-    % So we must have a value of at least Y in order to miss all the 
-    % plotted bar data:
-    Y=max(yd(:));
-
-
-    % Now let's check if any other plot elements (such as significance bars we've 
-    % already added) exist over this range of x values.
-    %
-    %  NOTE! This code doesn't identify all cases where there is overlap. 
-    % For example, if you have a significance bar going from 3 to 7 along the x
-    % axis and you then try to add a new one from 4 to 5, then it won't see the 
-    % existing one as overlapping. However, I've yet to find this a problem in
-    % practice so I'll leave things be. Can easily be fixed if leads to bugs. 
-
-    p=findobj(gca,'Type','Line');
-    tmpY=nan(1,length(p));
-
-    for ii=1:length(p)
-        xd=get(p(ii),'XData');
-
-
-        xd(xd<x(1))=0;
-        xd(xd>x(2))=0;
-
-        overlapping=xd>0; %These x locations overlap
-
-        if ~any(overlapping)
-            continue
-        end
-
-        yd=get(p(ii),'YData');
-        yd=yd(overlapping);
-        tmpY(ii)=max(yd);
-
-    end
-
-    Y=max([Y,tmpY]);
+    axis(gca,'normal')
+    set(gca,'XLim',oldXLim,'YLim',oldYLim)
 
 end %close findMinY
-
-
-function out=groupedBarFix(in,xy)
-    %The patch coords of grouped error bars aren't a matrix but a cell array. This needs to be
-    %converted to a suitable matrix in order for the code to work. This function does that.  
-        out=ones([size(in{1}),length(in)]);
-        for ii=1:length(in)
-            out(:,:,ii)=in{ii};
-        end
-
-        switch xy
-            case 'x'
-                out=mean(out,3);
-            case 'y'
-                out=max(out,[],3);
-        end
-end %groupedBarFix
-
 
 
 function rng=myRange(x)
     %replacement for stats toolbox range function
     rng = max(x) - min(x);
 end %close myRange
-
-function b=isBoxPlot
-    u=get(gca,'UserData');
-    if isempty(u)
-       b=false;
-       return
-    end
-
-    if iscell(u) && strcmp(u{1},'boxplot') && ~isempty(findobj('Tag','Median'))
-        b=true;
-    else
-        b=false;
-    end
-end %close isBoxPlot
-
 

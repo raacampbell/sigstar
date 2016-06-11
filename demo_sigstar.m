@@ -9,9 +9,12 @@ function demo_sigstar
 % 
 
 
+rows=2;
+cols=3;
+
 clf
 
-subplot(2,2,1)
+subplot(rows,cols,1)
 
 H=bar([1.8,2,1.2,1.9,1,2,3]);
 set(H,'FaceColor',[0.5,1,0.5])
@@ -19,7 +22,7 @@ groups={[4,7],[2,3],[6,5]};
 H=sigstar(groups,[0.001,0.05,0.04]);
 
 
-subplot(2,2,2)
+subplot(rows,cols,2)
 H=bar([10,7,6,5]);
 set(gca,'XTickLabel',{'X','a','b','c'})
 set(H,'FaceColor',[0.5,1,0.5])
@@ -39,7 +42,7 @@ ylim([0,13])
 
 
 
-subplot(2,2,3)
+subplot(rows,cols,3)
 %A box plot
 d=randn([20,3]);
 d(:,2)=d(:,2)+2;
@@ -49,7 +52,7 @@ H=sigstar({[1,2],[2,3]},[]);
 
 
 
-subplot(2,2,4)
+subplot(rows,cols,4)
 %A line plot
 x=1:12;
 y=randn(size(x));
@@ -62,5 +65,22 @@ sigstar({[5,6]},[0.05]);
 xlim([1,12])
 
 
-%set(gcf,'PaperPosition',[0,0,8,8])
-%print -depsc test
+%Grouped bar chart
+subplot(rows,cols,5)
+y = [2 2 3; 2 5 6; 2 8 9; 6 13 15];
+bar(y)
+sigstar({[1,4],[2,4],[3,4]},[0.05,0.05,0.05]);
+xlim([0.5,4.5])
+
+
+
+if exist('notBoxPlot')
+	subplot(rows,cols,6)
+	R=randn(15,3);
+	R(:,2)=	R(:,2)+2;
+	notBoxPlot(R)
+	sigstar({[1,2],[3,2]},[0.05,0.05]);
+
+end
+
+
