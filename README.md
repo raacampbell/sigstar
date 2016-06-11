@@ -5,6 +5,8 @@ To my knowledge, no MATLAB function for adding these is openly available.
 `sigstar` makes it easy to add lines and significance asterisks joining one or more pairs of groups on bar charts, box plots, and even line plots. The user simply supplies the identities of the two groups and the p-value 
 (which the user has calculated using an appropriate test). 
 
+<img src="https://github.com/raacampbell/sigstar/blob/gh-pages/images/ss.png" />
+
 ### Usage
 Group identity is defined as x-axis locations or, optionally, group names (if the x-axis labels are strings). 
 `sigstar` converts the supplied p-values to the appropriate number of asterisks and plots these over the lines that link the pair of groups.
