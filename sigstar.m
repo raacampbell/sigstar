@@ -274,11 +274,13 @@ end %close makeSignificanceBar
 
 
 function Y=findMinY(x)
-    %Find the minimum y value needed to clear all the plotted data present 
-    %over a given range of x values. This allows the significance bar to
-    %be plotted in the best location. 
+    % The significance bar needs to be plotted a reasonable distance above all the data points
+    % found over a particular range of X values. So we need to find these data and calculat the 
+    % the minimum y value needed to clear all the plotted data present over this given range of 
+    % x values. 
     %
-
+    % TODO: current system seems cumbersome. Is it possible to just loop through all plot objects?
+    
     %First look for patch objects (bars in a bar-chart, most likely)
     if verLessThan('matlab','8.4.0')
         p=findobj(gca,'Type','Patch');
