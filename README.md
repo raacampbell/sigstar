@@ -27,5 +27,5 @@ The function should produce publication quality results, but you may need to pla
 Significance indicators, like significance stars, are often missued. 
 Keep the following guidelines in mind when using this function:
 * Only use the stars to highlight important results. Do not clutter your figures with irrelevent statistical tests. 
-* If your data can be fitted with a line or curve then do this and report and the coefficients and their associated confidence intervals. Do not perform multiple significance tests between different points along the curve. This is almost always bad practice. 
+* If your data can be fitted with a line or curve then do this and report and the coefficients (e.g. slope) and their associated confidence intervals. Do not perform multiple significance tests between different points along the curve just to highlight a trend. 
 * Barplots hide data: avoid them (even with error bars). Instead use historgrams, violin plots, box plots, or [notBoxPlots](https://github.com/raacampbell/notBoxPlot).
