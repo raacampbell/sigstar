@@ -284,6 +284,11 @@ function Y=findMinY(x)
     oldYLim = get(gca,'YLim');
 
     axis(gca,'tight')
+    
+    %increase range of x values by 0.1 to ensure correct y max is used
+    x(1)=x(1)-0.1;
+    x(2)=x(2)+0.1;
+    
     set(gca,'xlim',x) %Matlab automatically re-tightens y-axis
 
     yLim = get(gca,'YLim'); %Now have max y value of all elements within range.
