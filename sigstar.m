@@ -288,8 +288,12 @@ function Y=findMinY(x)
     %increase range of x values by 0.1 to ensure correct y max is used
     x(1)=x(1)-0.1;
     x(2)=x(2)+0.1;
-    
-    set(gca,'xlim',x) %Matlab automatically re-tightens y-axis
+
+    % The following not needed if we have a CategoricalRuler, where it
+    % fails anyway
+    if ~isa(get(gca,'XAxis'),'matlab.graphics.axis.decorator.CategoricalRuler')
+        set(gca,'xlim',x) %Matlab automatically re-tightens y-axis
+    end
 
     yLim = get(gca,'YLim'); %Now have max y value of all elements within range.
     Y = max(yLim);
